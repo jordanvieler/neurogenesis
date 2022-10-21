@@ -7,9 +7,8 @@ import time
 
 # TODO: add node metadata validation
 # TODO: refactor
-    # Move into repo
 
-network_location = Path('/home/jordan/theNet/')
+network_location = Path('/home/jordan/brain/')
 
 def createNode(title: str = '') -> None:
     node_id = uuid.uuid4()
@@ -50,18 +49,26 @@ def refreshDatabase() -> None:
     print(f'Updated Database in {elapsed_time}s')
     return None 
 
+def printDatabaseJSON() -> None:
+    db_path = Path.cwd()/Path('.database.json')
+    with open(db_path, 'r') as file:
+        print(file.read())
+    return None
+
 def main():
     os.chdir(network_location)
 
     parser = argparse.ArgumentParser(description='Does Neuron Stuff')
     command = parser.add_mutually_exclusive_group(required=True)
-    command.add_argument('command', help='Command to issue: new or refresh', nargs='?', choices=('new', 'refresh'))
+    command.add_argument('command', help='Command to issue: new or refresh, get_nodes', nargs='?', choices=('new', 'refresh', 'get_nodes'))
     args = parser.parse_args()
     if args.command=='new':
         createNode()
         refreshDatabase()
     elif args.command=='refresh':
         refreshDatabase()
+    elif args.command=='get_nodes':
+        printDatabaseJSON()
     return None
 
 if __name__ == '__main__':
