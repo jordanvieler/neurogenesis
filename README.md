@@ -1,2 +1,2 @@
 # neurogenesis
-My notetaking system.
+My notetaking script. WIP
