@@ -28,7 +28,7 @@ def createNode(title: str = '') -> None:
     ]
     with open(path, 'w') as file:
         file.writelines(metadata_header)
-    print(f'Created a new node with ID:{node_id}')
+    print(f'Created a new node with ID:{node_id} and TITLE:{title}')
     return None
 
 
@@ -102,15 +102,21 @@ def main():
     readConfig()
     os.chdir(notes_directory)
 
-    parser = argparse.ArgumentParser(description='Does Neurogenesis Stuff')
-    command = parser.add_mutually_exclusive_group(required=True)
-    command.add_argument('command',
-                         help='Command to issue: new or refresh, get_nodes',
-                         nargs='?',
-                         choices=('new', 'refresh', 'get_nodes'))
+    parser = argparse.ArgumentParser(
+        prog='Neurogenesis',
+        description='Does Neurogenesis Stuff'
+    )
+    subparsers = parser.add_subparsers(dest='command', help='sub-command help')
+
+    new_parser = subparsers.add_parser('new', help='creates a new node')
+    new_parser.add_argument('--title', help='title for the new node')
+
+    subparsers.add_parser('refresh', help='refreshes the database')
+    subparsers.add_parser('get_nodes', help='returns node data in JSON format')
+
     args = parser.parse_args()
     if args.command == 'new':
-        createNode()
+        createNode(title=args.title)
         refreshDatabase()
     elif args.command == 'refresh':
         refreshDatabase()
